@@ -17,7 +17,7 @@
     "watch": "node tools/build.mjs --watch"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.4",
+    "@biomejs/biome": "2.6.5",
     "@devvit/web": "0.15.2",
     "@types/node": "24.19.2",
     "devvit": "0.15.2",
