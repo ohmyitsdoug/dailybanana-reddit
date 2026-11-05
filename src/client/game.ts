@@ -107,6 +107,7 @@ function results(r: Result, rsp: FinishRsp | null): void {
     ${rsp?.stats ? ` · streak ${rsp.stats.streak} · ${rsp.stats.played} played` : ''}${rsp && !rsp.saved && rsp.stats ? ' · your first finish counts' : ''}</p>
     <div class="row"><button class="btn main" id="copy" type="button">Copy result</button><button class="btn" id="site" type="button">More at dailybanana.io</button></div>
     ${board.length ? `<p class="eyebrow">Today’s top ${board.length}</p><ol class="board">${board.map(b => `<li><span>${esc(b.name)}</span><b>${b.total}</b></li>`).join('')}</ol>` : ''}
+    <p class="note">Talking answers in the comments? Use spoiler tags: <code>&gt;!like this!&lt;</code></p>
     <p class="note">A new daily every day at midnight, your time.</p>`
   ;(document.getElementById('copy') as HTMLButtonElement).addEventListener('click', ev => void copy(text, ev.currentTarget as HTMLButtonElement))
   ;(document.getElementById('site') as HTMLButtonElement).addEventListener('click', openSite)

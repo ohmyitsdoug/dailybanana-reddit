@@ -39,3 +39,4 @@ p{margin:0}
 .board li:first-child{border-top:0}
 .board li span::before{content:counter(r) '. ';color:var(--mut)}
 .copybox{width:100%;font:inherit;font-size:14px;padding:8px;border:2px solid var(--ink);background:var(--card);color:var(--ink)}
+code{font-family:ui-monospace,monospace;font-size:13px;background:var(--card);border:1px solid var(--line);padding:1px 5px}

@@ -117,8 +117,18 @@ function titleFor(): string {
   const iso = easternISO(), d = dailyFor(iso)
   return `Daily Banana #${String(d.n).padStart(3, '0')} · ${MONTHS[Number(iso.slice(5, 7)) - 1]} ${Number(iso.slice(8, 10))}`
 }
+// pinned on every daily post: keep answers in spoiler tags so people who haven't played yet don't see them
+const SPOILER_NOTE =
+  'Talking about today’s answers? Please hide them in spoiler tags so nobody gets spoiled: type `>!your answer!<` and it shows as a spoiler.'
 async function postToday() {
-  return reddit.submitCustomPost({title: titleFor()})
+  const post = await reddit.submitCustomPost({title: titleFor()})
+  try {
+    const c = await reddit.submitComment({id: post.id, text: SPOILER_NOTE})
+    await c.distinguish(true)   // pinned to the top of the comments (needs the app to have mod permissions)
+  } catch (err) {
+    console.error(`spoiler note: ${err instanceof Error ? err.message : err}`)
+  }
+  return post
 }
 
 async function routeNewPost(): Promise<UiResponse> {
