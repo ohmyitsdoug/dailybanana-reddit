@@ -4,7 +4,7 @@ import {
   dailyFor, fmt, judge, len, localISO, MAX_PTS, offLabel, parseGuess, question,
   ROUND_SECONDS, ROUNDS, shareText, unitWord,
 } from '../shared/game.ts'
-import {api, banana, esc, openSite, tiles} from './ui.ts'
+import {api, esc, logo, openSite, tiles} from './ui.ts'
 
 const root = document.getElementById('app') as HTMLElement
 const daily = dailyFor(localISO())
@@ -26,7 +26,7 @@ function drop(): void {
 const total = (): number => live.points.reduce<number>((s, p) => s + (p ?? 0), 0)
 
 function head(round = live.i + 1): string {
-  return `<div class="top"><div class="brand">${banana(26)}<span>Daily #${String(daily.n).padStart(3, '0')}</span></div>
+  return `<div class="top">${logo(`Daily #${String(daily.n).padStart(3, '0')}`)}
     <span class="chip">${Math.min(round, ROUNDS)}/${ROUNDS} · ${total()}</span></div>
     ${tiles([...live.points, ...Array<undefined>(ROUNDS - live.points.length).fill(undefined)])}`
 }
@@ -99,7 +99,7 @@ async function finish(): Promise<void> {
 function results(r: Result, rsp: FinishRsp | null): void {
   const text = shareText(r.n, r.total, r.points)
   const board = rsp?.board ?? []
-  root.innerHTML = `<div class="top"><div class="brand">${banana(26)}<span>Daily #${String(r.n).padStart(3, '0')}</span></div></div>
+  root.innerHTML = `<div class="top">${logo(`Daily #${String(r.n).padStart(3, '0')}`)}</div>
     <p class="eyebrow">Your score</p>
     <p class="big">${r.total}<small> / ${ROUNDS * MAX_PTS}</small></p>
     ${tiles(r.points)}

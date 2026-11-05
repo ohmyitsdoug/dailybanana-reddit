@@ -2,7 +2,7 @@
 import {requestExpandedMode} from '@devvit/web/client'
 import {Endpoint, type InitRsp} from '../shared/api.ts'
 import {dailyFor, localISO, ROUND_SECONDS, ROUNDS} from '../shared/game.ts'
-import {api, banana, openSite, tiles} from './ui.ts'
+import {api, logo, openSite, tiles} from './ui.ts'
 
 const root = document.getElementById('app') as HTMLElement
 const daily = dailyFor(localISO())
@@ -11,7 +11,7 @@ function draw(init: InitRsp | null): void {
   const r = init?.result
   const players = init?.today.players ?? 0
   root.innerHTML = `
-    <div class="brand">${banana(34)}<span>dailybanana.io</span></div>
+    ${logo('dailybanana.io', true)}
     <h1>Daily #${String(daily.n).padStart(3, '0')}</h1>
     ${r
       ? `<p class="lead">You scored <b>${r.total}</b> / ${ROUNDS * 100}</p>${tiles(r.points)}`

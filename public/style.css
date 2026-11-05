@@ -7,7 +7,9 @@
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:SG,system-ui,sans-serif}
 #app{max-width:460px;margin:0 auto;padding:18px 16px 24px;display:flex;flex-direction:column;gap:14px;min-height:100%}
 .splash #app{justify-content:center;align-items:flex-start}
-.brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px;letter-spacing:-.5px}
+.brand .m{display:inline-flex;width:30px;height:30px;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);align-items:center;justify-content:center;background:var(--card);flex:none}
+.brand.big{font-size:22px;gap:10px}.brand.big .m{width:42px;height:42px;box-shadow:3px 3px 0 var(--ink)}
 .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .chip{border:2px solid var(--ink);background:var(--acc);color:#3B2412;font-weight:700;font-size:14px;padding:4px 10px;box-shadow:3px 3px 0 var(--ink);font-variant-numeric:tabular-nums}
 h1{margin:0;font-size:40px;line-height:1.05}
@@ -33,7 +35,11 @@ p{margin:0}
 .tile.mid{background:#FFD43B;color:#3B2412}.tile.good{background:#8A5A2B;color:#FFF3C9}
 .tile.low,.tile.miss{color:var(--mut);box-shadow:none}
 .tile.empty{border:2px dashed var(--line);box-shadow:none;color:var(--mut);background:transparent}
-.tile img{display:block}
+.tile.bull{container-type:inline-size;gap:0}
+.tile.bull svg{display:block;width:40cqw;height:auto;margin-bottom:3cqw}
+.tile.bull b{font-size:24cqw}
+.tile.gold{position:relative;overflow:hidden;justify-content:flex-end;padding-bottom:3px}
+.tile .gb{display:block;width:96%;aspect-ratio:1;margin:-2% 0 -20%;background:url(golden-banana.svg) center/contain no-repeat;flex:none}
 .board{margin:0;padding:0;list-style:none;border:2px solid var(--ink);background:var(--card)}
 .board li{display:flex;justify-content:space-between;padding:8px 12px;border-top:1px solid var(--line);counter-increment:r}
 .board li:first-child{border-top:0}
