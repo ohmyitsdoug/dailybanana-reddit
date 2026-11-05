@@ -1,11 +1,18 @@
 {
   "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
   "name": "dailybanana-io",
-  "permissions": {"redis": true},
+  "permissions": {
+    "redis": true
+  },
   "post": {
     "entrypoints": {
-      "default": {"entry": "splash.html", "height": "regular"},
-      "game": {"entry": "game.html"}
+      "default": {
+        "entry": "splash.html",
+        "height": "regular"
+      },
+      "game": {
+        "entry": "game.html"
+      }
     }
   },
   "server": {},
@@ -21,7 +28,10 @@
       {
         "label": "Daily Banana stats",
         "description": "Players today, yesterday, all-time, and how many came back.",
-        "location": ["subreddit", "post"],
+        "location": [
+          "subreddit",
+          "post"
+        ],
         "forUserType": "moderator",
         "endpoint": "/internal/on/menu/stats"
       }
@@ -32,10 +42,16 @@
   },
   "scheduler": {
     "tasks": {
-      "daily-post": {"endpoint": "/internal/scheduler/daily-post", "cron": "5 5 * * *"}
+      "daily-post": {
+        "endpoint": "/internal/scheduler/daily-post",
+        "cron": "5 5 * * *"
+      }
     }
   },
   "scripts": {
     "dev": "npm run watch"
+  },
+  "marketingAssets": {
+    "icon": "assets/icon.png"
   }
 }
