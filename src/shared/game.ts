@@ -4,7 +4,7 @@
 // and guesses are scored against that shown number, so an exact guess scores 100.
 import data from './daily-data.json'
 
-export type Item = {name: string; plural: string; art: string; dim: string; cm: number}
+export type Item = {name: string; plural: string; art: string; dim: string; cm: number; avg: boolean}
 export type Question = {A: Item; B: Item; ans: number; show: number}
 export type Daily = {n: number; date: string; qs: Question[]}
 
@@ -12,12 +12,12 @@ export const ROUNDS = 6
 export const ROUND_SECONDS = 25
 export const MAX_PTS = 100
 
-type Raw = {items: {[id: string]: [string, string, string, string, number]}; dailies: [number, string, number[]][]}
+type Raw = {items: {[id: string]: [string, string, string, string, number, number?]}; dailies: [number, string, number[]][]}
 const RAW = data as unknown as Raw
 
 const item = (id: number): Item => {
-  const [name, plural, art, dim, cm] = RAW.items[String(id)]
-  return {name, plural, art, dim, cm}
+  const [name, plural, art, dim, cm, avg] = RAW.items[String(id)]
+  return {name, plural, art, dim, cm, avg: !!avg}
 }
 
 export const roundAns = (n: number): number =>
@@ -53,7 +53,10 @@ export const localISO = (t = new Date()): string =>
   `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`
 
 const the = (b: Item): string => (b.art ? `${b.art} ${b.name}` : b.name)
-export const question = (q: Question): string => `Approximately how many ${q.A.plural} ${q.B.dim} is ${the(q.B)}?`
+// things whose size varies are averages: "the average carrot" in questions, "an average carrot" in sentences
+export const theQ = (b: Item): string => (b.avg ? `the average ${b.name}` : the(b))
+export const anAvg = (b: Item): string => (b.avg ? `an average ${b.name}` : the(b))
+export const question = (q: Question): string => `Approximately how many ${q.A.plural} ${q.B.dim} is ${theQ(q.B)}?`
 
 /** points = accuracy as a percent: the smaller of (guess, answer) over the bigger. */
 export function judge(guess: number, q: Question): {p: number; off: number} {

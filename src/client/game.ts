@@ -1,7 +1,7 @@
 // The expanded view: six timed rounds, the reveal after each, then results and the day's leaderboard.
 import {Endpoint, type FinishRsp, type InitRsp, type Result} from '../shared/api.ts'
 import {
-  dailyFor, fmt, judge, len, localISO, MAX_PTS, offLabel, parseGuess, question,
+  anAvg, dailyFor, fmt, judge, localISO, MAX_PTS, offLabel, parseGuess, question,
   ROUND_SECONDS, ROUNDS, shareText, unitWord,
 } from '../shared/game.ts'
 import {api, esc, logo, openSite, tiles} from './ui.ts'
@@ -76,16 +76,18 @@ function answer(guess: number | null): void {
   root.innerHTML = `${head(live.i)}
     <p class="big">${j.p == null ? '0' : `+${j.p}`}</p>
     <p class="lead">${esc(offLabel(j.p, j.off))}${guess != null && j.p !== MAX_PTS ? ` You said ${fmt(guess)}.` : ''}</p>
-    <p class="q">${esc(capital(q.B))} is about <b>${fmt(q.show)} ${esc(unitWord(q, q.show))}</b> ${esc(q.B.dim)}.</p>
-    <p class="note">${esc(capital(q.B))}: ${len(q.B.cm)} · ${esc(q.A.name)}: ${len(q.A.cm)}</p>
+    <p class="q">${esc(cap(anAvg(q.B)))} is about <b>${fmt(q.show)} ${esc(unitWord(q, q.show))}</b> ${esc(q.B.dim)}.</p>
+    <p class="note">${esc(cap(anAvg(q.B)))} is about <b>${inBananas(q.B.cm)}</b> ${esc(q.B.dim)}. ${esc(cap(anAvg(q.A)))} is about <b>${inBananas(q.A.cm)}</b>.</p>
     <button class="btn main" id="next" type="button"><span>${live.i >= ROUNDS ? 'See results' : 'Next'}</span><span aria-hidden="true">→</span></button>`
   const next = document.getElementById('next') as HTMLButtonElement
   next.focus()
   next.addEventListener('click', () => (live.i >= ROUNDS ? void finish() : showRound()))
 }
-const capital = (b: {art: string; name: string}): string => {
-  const s = b.art ? `${b.art} ${b.name}` : b.name
-  return s.charAt(0).toUpperCase() + s.slice(1)
+const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1)
+// sizes in bananas (18 cm), one decimal under 10: "about 0.8 bananas", "about 111 bananas"
+const inBananas = (cm: number): string => {
+  const x = cm / 18, v = x < 10 ? Math.round(x * 10) / 10 : Math.round(x)
+  return `${fmt(v)} ${v === 1 ? 'banana' : 'bananas'}`
 }
 
 // ---------- results ----------
