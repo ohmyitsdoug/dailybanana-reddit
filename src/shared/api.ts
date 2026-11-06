@@ -2,7 +2,13 @@
 export type ErrorRsp = {error: string; status: number}
 
 /** A finished daily as stored for a player. points[i] is null when time ran out. */
-export type Result = {n: number; total: number; points: (number | null)[]; guesses: (number | null)[]; at: number}
+export type Result = {
+  n: number
+  total: number
+  points: (number | null)[]
+  guesses: (number | null)[]
+  at: number
+}
 
 export type Stats = {played: number; streak: number; best: number}
 export type BoardRow = {name: string; total: number}
@@ -16,7 +22,11 @@ export type InitRsp = {
 }
 
 /** POST api/finish */
-export type FinishReq = {n: number; points: (number | null)[]; guesses: (number | null)[]}
+export type FinishReq = {
+  n: number
+  points: (number | null)[]
+  guesses: (number | null)[]
+}
 export type FinishRsp = {
   saved: boolean
   result: Result
@@ -52,4 +62,5 @@ export const EndpointMethod = {
 } as const satisfies {[endpoint: string]: 'GET' | 'POST'}
 
 /** The website link from inside the app, tagged so the dashboard shows Reddit as the source. */
-export const SITE_URL = 'https://dailybanana.io/?utm_source=reddit&utm_medium=app&utm_campaign=devvit'
+export const SITE_URL =
+  'https://dailybanana.io/?utm_source=reddit&utm_medium=app&utm_campaign=devvit'

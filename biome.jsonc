@@ -1,7 +1,15 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.6.4/schema.json",
   "css": {"formatter": {"enabled": true, "quoteStyle": "single"}},
-  "files": {"includes": ["**", "!dist/", "!public/*.js*", "!public/*.svg", "!src/shared/daily-data.json"]},
+  "files": {
+    "includes": [
+      "**",
+      "!dist/",
+      "!public/*.js*",
+      "!public/*.svg",
+      "!src/shared/daily-data.json"
+    ]
+  },
   "formatter": {
     "bracketSpacing": false,
     "enabled": true,

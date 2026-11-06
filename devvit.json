@@ -28,10 +28,7 @@
       {
         "label": "Daily Banana stats",
         "description": "Players today, yesterday, all-time, and how many came back.",
-        "location": [
-          "subreddit",
-          "post"
-        ],
+        "location": ["subreddit", "post"],
         "forUserType": "moderator",
         "endpoint": "/internal/on/menu/stats"
       }

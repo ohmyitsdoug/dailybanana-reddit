@@ -9,7 +9,10 @@
 import {redis} from '@devvit/web/server'
 import type {BoardRow, Result, Stats} from '../shared/api.ts'
 
-export async function getResult(n: number, uid: string): Promise<Result | null> {
+export async function getResult(
+  n: number,
+  uid: string,
+): Promise<Result | null> {
   const v = await redis.get(`res:${n}:${uid}`)
   return v ? (JSON.parse(v) as Result) : null
 }
@@ -17,19 +20,31 @@ export async function getResult(n: number, uid: string): Promise<Result | null> 
 export async function getStats(uid: string): Promise<Stats | null> {
   const h = await redis.hGetAll(`user:${uid}`)
   if (!h?.played) return null
-  return {played: Number(h.played), streak: Number(h.streak || 0), best: Number(h.best || 0)}
+  return {
+    played: Number(h.played),
+    streak: Number(h.streak || 0),
+    best: Number(h.best || 0),
+  }
 }
 
-export async function dayTotals(n: number): Promise<{players: number; avg: number}> {
+export async function dayTotals(
+  n: number,
+): Promise<{players: number; avg: number}> {
   const players = await redis.zCard(`board:${n}`)
   const sum = Number((await redis.get(`sum:${n}`)) ?? 0)
   return {players, avg: players ? Math.round(sum / players) : 0}
 }
 
 export async function topBoard(n: number, size = 10): Promise<BoardRow[]> {
-  const rows = await redis.zRange(`board:${n}`, 0, size - 1, {by: 'rank', reverse: true})
+  const rows = await redis.zRange(`board:${n}`, 0, size - 1, {
+    by: 'rank',
+    reverse: true,
+  })
   if (!rows.length) return []
-  const names = await redis.hMGet('names', rows.map(r => r.member))
+  const names = await redis.hMGet(
+    'names',
+    rows.map(r => r.member),
+  )
   return rows.map((r, i) => ({name: names[i] || 'someone', total: r.score}))
 }
 
@@ -38,12 +53,18 @@ export async function rankOf(n: number, uid: string): Promise<number | null> {
   const total = await redis.zScore(`board:${n}`, uid)
   if (total == null) return null
   // players with a strictly higher score, plus one (ties share a rank)
-  const higher = await redis.zRange(`board:${n}`, total + 0.5, '+inf', {by: 'score'})
+  const higher = await redis.zRange(`board:${n}`, total + 0.5, '+inf', {
+    by: 'score',
+  })
   return higher.length + 1
 }
 
 /** Saves a first finish of daily n. Returns false if this player already finished it (the first one stands). */
-export async function saveResult(uid: string, username: string, res: Result): Promise<boolean> {
+export async function saveResult(
+  uid: string,
+  username: string,
+  res: Result,
+): Promise<boolean> {
   const key = `res:${res.n}:${uid}`
   if (await redis.get(key)) return false
   await redis.set(key, JSON.stringify(res))
@@ -63,7 +84,8 @@ export async function saveResult(uid: string, username: string, res: Result): Pr
     firstN: h.firstN || String(res.n),
   })
   if (!h.firstN) await redis.zAdd('players', {member: uid, score: res.n})
-  else if (h.firstN !== String(res.n)) await redis.zAdd('returners', {member: uid, score: res.n})
+  else if (h.firstN !== String(res.n))
+    await redis.zAdd('returners', {member: uid, score: res.n})
   return true
 }
 
