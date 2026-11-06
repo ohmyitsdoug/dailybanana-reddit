@@ -84,9 +84,19 @@ function answer(guess: number | null): void {
   next.addEventListener('click', () => (live.i >= ROUNDS ? void finish() : showRound()))
 }
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1)
-// sizes in bananas (18 cm), one decimal under 10: "about 0.8 bananas", "about 111 bananas"
+// sizes in bananas (18 cm): plain fractions under one ("3/4 of a banana", "1/6 of a banana"), then "1.4 bananas", "111 bananas"
 const inBananas = (cm: number): string => {
-  const x = cm / 18, v = x < 10 ? Math.round(x * 10) / 10 : Math.round(x)
+  const x = cm / 18
+  if (x < 0.4) {
+    for (const [n, d] of [[1, 3], [1, 4]] as const) if (Math.abs(x - n / d) < 0.03) return `${n}/${d} of a banana`
+    return `1/${Math.round(1 / x)} of a banana`
+  }
+  if (x < 0.95) {
+    const opts: [number, number][] = [[1, 2], [2, 3], [3, 4], [1, 1]]
+    const [n, d] = opts.reduce((b, c) => (Math.abs(x - c[0] / c[1]) < Math.abs(x - b[0] / b[1]) ? c : b))
+    if (d > 1) return `${n}/${d} of a banana`
+  }
+  const v = x < 1.05 ? 1 : x < 10 ? Math.round(x * 10) / 10 : Math.round(x)
   return `${fmt(v)} ${v === 1 ? 'banana' : 'bananas'}`
 }
 
