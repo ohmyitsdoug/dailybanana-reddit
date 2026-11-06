@@ -1,7 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.6.4/schema.json",
   "css": {"formatter": {"enabled": true, "quoteStyle": "single"}},
-  "files": {"includes": ["**", "!dist/", "!public/*.js*"]},
+  "files": {"includes": ["**", "!dist/", "!public/*.js*", "!public/*.svg", "!src/shared/daily-data.json"]},
   "formatter": {
     "bracketSpacing": false,
     "enabled": true,
@@ -22,7 +22,9 @@
       "correctness": {
         // Biome resolves conditional exports without the browser condition,
         // which reports false positives for `@devvit/web/client` named exports.
-        "noUnresolvedImports": "off"
+        "noUnresolvedImports": "off",
+        // the puzzle data is bundled by esbuild, which reads JSON without an import attribute
+        "useJsonImportAttributes": "off"
       },
       "nursery": {
         "noFloatingPromises": "error",

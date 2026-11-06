@@ -2,7 +2,7 @@
 //   node tools/build.mjs           one build (minified)
 //   node tools/build.mjs --watch   rebuild on every change (used by `npm run playtest`)
 //   node tools/build.mjs --clean   remove build output
-import {rmSync, readdirSync} from 'node:fs'
+import {readdirSync, rmSync} from 'node:fs'
 import * as esbuild from 'esbuild'
 
 const watch = process.argv.includes('--watch')

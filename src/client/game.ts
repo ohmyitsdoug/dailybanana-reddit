@@ -11,7 +11,7 @@ const daily = dailyFor(localISO())
 const SAVE_KEY = `dbr:live:${daily.n}`   // an unfinished game on this device, so closing the view doesn't lose it
 
 type Live = {i: number; points: (number | null)[]; guesses: (number | null)[]; offs: number[]}
-let live: Live = load() ?? {i: 0, points: [], guesses: [], offs: []}
+const live: Live = load() ?? {i: 0, points: [], guesses: [], offs: []}
 let timer: number | undefined
 
 function load(): Live | null {

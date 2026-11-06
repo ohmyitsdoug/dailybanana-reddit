@@ -16,7 +16,7 @@ export async function getResult(n: number, uid: string): Promise<Result | null> 
 
 export async function getStats(uid: string): Promise<Stats | null> {
   const h = await redis.hGetAll(`user:${uid}`)
-  if (!h || !h.played) return null
+  if (!h?.played) return null
   return {played: Number(h.played), streak: Number(h.streak || 0), best: Number(h.best || 0)}
 }
 

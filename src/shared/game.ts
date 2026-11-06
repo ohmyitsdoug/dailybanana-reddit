@@ -16,7 +16,9 @@ type Raw = {items: {[id: string]: [string, string, string, string, number, numbe
 const RAW = data as unknown as Raw
 
 const item = (id: number): Item => {
-  const [name, plural, art, dim, cm, avg] = RAW.items[String(id)]
+  const row = RAW.items[String(id)]
+  if (!row) throw Error(`no item ${id}`)
+  const [name, plural, art, dim, cm, avg] = row
   return {name, plural, art, dim, cm, avg: !!avg}
 }
 
@@ -30,7 +32,7 @@ export const roundAns = (n: number): number =>
 function build(row: [number, string, number[]]): Daily {
   const [n, date, ids] = row, qs: Question[] = []
   for (let i = 0; i < ids.length; i += 2) {
-    const A = item(ids[i]), B = item(ids[i + 1]), ans = B.cm / A.cm
+    const A = item(ids[i] ?? -1), B = item(ids[i + 1] ?? -1), ans = B.cm / A.cm
     qs.push({A, B, ans, show: roundAns(ans)})
   }
   return {n, date, qs}
@@ -42,7 +44,9 @@ export function dailyFor(iso: string): Daily {
   const exact = d.find(x => x[1] === iso)
   if (exact) return build(exact)
   const idx = d.findIndex(x => x[1] > iso)
-  return build(idx === -1 ? d[d.length - 1] : d[Math.max(0, idx - 1)])
+  const row = idx === -1 ? d[d.length - 1] : d[Math.max(0, idx - 1)]
+  if (!row) throw Error('no dailies')
+  return build(row)
 }
 export function dailyByNumber(n: number): Daily | undefined {
   const row = RAW.dailies.find(x => x[0] === n)
@@ -80,7 +84,7 @@ export function parseGuess(raw: string): number | null {
   const s = String(raw).toLowerCase().replace(/[,\s~≈]/g, '')
   const m = s.match(/^(\d*\.?\d+)(k|m)?$/)
   if (!m) return null
-  const n = parseFloat(m[1]) * (m[2] === 'k' ? 1e3 : m[2] === 'm' ? 1e6 : 1)
+  const n = parseFloat(m[1] ?? '') * (m[2] === 'k' ? 1e3 : m[2] === 'm' ? 1e6 : 1)
   return n > 0 && Number.isFinite(n) ? n : null
 }
 
