@@ -26,3 +26,5 @@ A practical [Devvit](https://developers.reddit.com/) app template with few depen
 - Promise misuse linter.
 - Formatter and bundler.
 - TypeScript project skeleton split by environment (frontend, backend, test, etc).
+
+Code style is checked by Biome in CI. To reformat everything, run the **Format** workflow from the Actions tab (or `npm run format` locally).
